@@ -6,23 +6,36 @@ AFRAME.registerComponent('objective', {
 	},
 
 	init: function () {
-		this.el.removeAttribute('wasd-controls');
+
+		const cameraEl = this.el;
+
+		cameraEl.removeAttribute('wasd-controls');
+
 	},
 
 	tick: function (time, timeDelta) {
 
 		const data = this.data;
-		const object3D = this.el.object3D;
+
+		const cameraObject3D = this.el.object3D;
+		const rigObject3D = this.el.object3D.parent;
 
 		// 
-		const position = object3D.position;
-		const rotation = object3D.rotation;
+		const rotation = cameraObject3D.rotation;
 
 		const x = data.position.x + data.r * Math.cos(rotation.x) * Math.sin(rotation.y);
 		const z = data.position.z + data.r * Math.cos(rotation.x) * Math.cos(rotation.y);
 		const y = data.position.y - data.r * Math.sin(rotation.x);
 
-		position.set(x, y, z);
+		rigObject3D.position.set(x, y - 1.6, z); // DEFAULT_CAMERA_HEIGHT: 1.6
+
+		// A-Frame バグ対策
+		// Issue: https://github.com/aframevr/aframe/issues/3401#issuecomment-370119459
+		cameraObject3D.position.set(0, 1.6, 0); // DEFAULT_CAMERA_HEIGHT: 1.6
+
+		// update
+		// これがないと次のフレームまで位置が正しく反映されない
+		cameraObject3D.updateMatrix(); 
 
 	}
 
