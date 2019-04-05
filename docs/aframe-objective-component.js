@@ -1,5 +1,7 @@
 AFRAME.registerComponent('objective', {
 
+	dependencies: ['look-controls'],
+
 	schema: {
 		r: {type: 'number', default: 2},
 		position: {type: 'vec3'}
@@ -32,17 +34,16 @@ AFRAME.registerComponent('objective', {
 		const rigObject3D = this.el.object3D.parent;
 
 		// 
-		const rotation = cameraObject3D.rotation;
+		const vector = new THREE.Vector3(0, 0, 2);
+		const quaternion = cameraObject3D.quaternion;
 
-		const x = data.position.x + data.r * Math.cos(rotation.x) * Math.sin(rotation.y);
-		const z = data.position.z + data.r * Math.cos(rotation.x) * Math.cos(rotation.y);
-		const y = data.position.y - data.r * Math.sin(rotation.x);
-
-		rigObject3D.position.set(x, y - 1.6, z); // DEFAULT_CAMERA_HEIGHT: 1.6
+		vector.applyQuaternion(quaternion);
+		rigObject3D.position.copy(vector);
+		rigObject3D.position.sub(cameraObject3D.position);
 
 		// update
 		// これがないと次のフレームまで位置が正しく反映されない
-		cameraObject3D.updateMatrix(); 
+		cameraObject3D.updateMatrix();
 
 	}
 
