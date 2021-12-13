@@ -17,10 +17,11 @@ AFRAME.registerComponent('objective', {
 
 	tick(time, timeDelta) {
 
+		const cameraEl = this.el;
 		const data = this.data;
 
-		const cameraObject3D = this.el.object3D;
-		const rigObject3D = this.el.object3D.parent;
+		const cameraObject3D = cameraEl.object3D;
+		const rigObject3D = cameraEl.object3D.parent;
 
 		// 
 		const vector = new THREE.Vector3(0, 0, 2);
