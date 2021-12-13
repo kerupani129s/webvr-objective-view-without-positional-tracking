@@ -3,18 +3,18 @@ AFRAME.registerComponent('objective', {
 	dependencies: ['look-controls'],
 
 	schema: {
-		r: {type: 'number', default: 2},
-		position: {type: 'vec3'}
+		r: { type: 'number', default: 2 },
+		position: { type: 'vec3' }
 	},
 
-	init: function () {
+	init() {
 
 		const cameraEl = this.el;
 
 		cameraEl.removeAttribute('wasd-controls');
 
 		// A-Frame バグ対策
-		cameraEl.sceneEl.addEventListener('exit-vr', function () {
+		cameraEl.sceneEl.addEventListener('exit-vr', () => {
 
 			// Issue: https://github.com/aframevr/aframe/issues/3401#issuecomment-370119459
 			cameraEl.object3D.position.set(0, 1.6, 0); // DEFAULT_CAMERA_HEIGHT: 1.6
@@ -26,7 +26,7 @@ AFRAME.registerComponent('objective', {
 
 	},
 
-	tick: function (time, timeDelta) {
+	tick(time, timeDelta) {
 
 		const data = this.data;
 
@@ -42,9 +42,9 @@ AFRAME.registerComponent('objective', {
 		rigObject3D.position.sub(cameraObject3D.position);
 
 		// update
-		// これがないと次のフレームまで位置が正しく反映されない
+		// メモ: これがないと次のフレームまで位置が正しく反映されない
 		cameraObject3D.updateMatrix();
 
-	}
+	},
 
 });
